@@ -1,6 +1,6 @@
 # pseudo-infinite-universe
-Pseudo random infinite universe.Move around and observe solar system with its plantes
-and moons in almost random, almost infinite universe :D.
+Pseudo random infinite universe. Move around and observe the solar system with its
+planets and moons in an almost random, almost infinite universe.
 
 # controls
 W - move up<br/>
