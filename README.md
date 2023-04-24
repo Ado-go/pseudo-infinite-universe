@@ -1,1 +1,1 @@
-# pseudoI-infinite-universe
+# pseudo-infinite-universe
