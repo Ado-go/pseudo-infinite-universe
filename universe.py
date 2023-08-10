@@ -38,10 +38,10 @@ class Universe:
 
     def create_stars(self):
         col = -10
-        for i in range(Width // 30):
+        for i in range(Width // 25):
             col += 30
             row = 0
-            for j in range(Height // 30):
+            for j in range(Height // 25):
                 row += 14
                 random_number = lehmer_random_number(((i + self.x) & 16777215) << 64 | ((j + self.y) & 16777215)
                                                      + self.randomness)
