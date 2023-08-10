@@ -1,6 +1,4 @@
 import tkinter as tk
-from random import choice, seed, randint
-
 
 Width = 500
 Height = 500
@@ -10,11 +8,19 @@ canvas = tk.Canvas(width=Width, height=Height, bg="black")
 canvas.pack()
 
 
+def lehmer_random_number(new_seed):
+    new_seed += 3777035285
+    temp = new_seed * 1245296397
+    m1 = temp >> 32 ^ temp
+    temp = m1 * 318428617
+    m2 = temp >> 32 ^ temp
+    return m2
+
+
 class Universe:
     def __init__(self):
         self.x = 0
         self.y = 0
-        self.randomness = randint(0, 1000000000000000)
         self.up = 0
         self.left = 0
         self.moving = False
@@ -27,16 +33,14 @@ class Universe:
             row = 0
             for j in range(Height // 30):
                 row += 14
-                seed((i + self.x) * 9 + (j + self.y) * (i + self.x) -
-                     (j + self.y) ** (j + self.y) + 6 * 3
-                     + self.randomness + 9 ** 5 - 23)
-                if choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) == 10:
-                    size = randint(10, 25)
+                random_number = lehmer_random_number(((i + self.x) & 16777215) << 64 | ((j + self.y) & 16777215))
+                if random_number % 11 == 10:
+                    size = random_number % 26
                     canvas.create_oval(i + col - size // 2 - 15,
                                        j + row * 2 - size // 2 - 10,
                                        i + size + col - size // 2 - 10,
                                        j + size + row * 2 - size // 2 - 5,
-                                       outline="white", fill=random_color())
+                                       outline="white", fill=random_color(random_number))
                     canvas.create_text(110, 20, text="X: {} Y: {} ".format(self.x, self.y),
                                        font=("Arial", 25),
                                        fill="white")
@@ -70,47 +74,45 @@ class Universe:
     def hover_over_planet(self, event):
         x = event.x // 30
         y = event.y // 30
-        seed((x + self.x) * 9 + (y + self.y) * (x + self.x) -
-             (y + self.y) ** (y + self.y) + 6 * 3 + self.randomness + 9 ** 5 - 23)
-        if choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) == 10:
-            size = randint(10, 25)
+        random_number = lehmer_random_number(((x + self.x) & 16777215) << 64 | ((y + self.y) & 16777215))
+        if random_number % 11 == 10:
             canvas.create_rectangle(0, Height//2, Width, Height,
                                     outline="lightblue", fill="lightblue")
             canvas.create_oval(10, Height // 2 + Height // 4,
                                60, Height // 2 + Height // 4 + 50,
-                               fill=random_color())
-            num = randint(0, 999999999)
+                               fill=random_color(random_number))
+            num = random_number % 999999999
             canvas.create_text(45, Height // 2 + Height // 4 - 30,
-                               text="Star " + choice(["X", "Y", "K"]) + str(num))
-            number_of_planets = randint(0, 9)
+                               text="Star " + str(num))
+            number_of_planets = random_number % 10
             space = 0
             for i in range(number_of_planets):
                 moon_space = 0
-                number_of_moons = randint(0, 3)
+                number_of_moons = (random_number + i) % 4
                 space += 35
                 canvas.create_oval(65 + space, Height // 2 + Height // 4 + 10,
                                    65 + space + 30, Height // 2 + Height // 4 + 40,
-                                   fill=random_color())
+                                   fill=random_color(random_number << i))
                 for j in range(number_of_moons):
                     moon_space += 22
                     canvas.create_oval(70 + space,
                                        Height // 2 + Height // 4 + 25 + moon_space,
                                        65 + space + 25,
                                        Height // 2 + Height // 4 + 45 + moon_space,
-                                       fill=random_color(True))
+                                       fill=random_color(random_number, True))
 
 
-def random_color(moon=False):
+def random_color(random_number, moon=False):
     color_palette = ["0", "1", "2", "3", "4", "5", "6", "7",
                      "8", "9", "a", "b", "c", "d", "e", "f"]
     color = "#"
     for i in range(6):
         if moon:
-            x = choice(color_palette)
-            y = choice(color_palette)
+            x = color_palette[random_number % 16]
+            y = color_palette[(random_number + 5) % 16]
             color += x+y+x+y+x+y
             return color
-        color += choice(color_palette)
+        color += color_palette[(random_number ^ i) % 16]
     return color
 
 
