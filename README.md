@@ -1,10 +1,16 @@
-# pseudo-infinite-universe
-Pseudo random infinite universe. Move around and observe the solar system with its
-planets and moons in an almost random, almost infinite universe.
+# Pseudo-infinite-universe
+Explore a pseudo-random, nearly infinite universe — move around and observe solar systems with planets and moons.
 
-# controls
-W - move up<br/>
-A - move left<br/>
-S - move down<br/>
-D - move right<br/>
-Left click on Star - obser solar system<br/>
+# Installation
+python universe.py
+
+# Controls
+W - move up
+
+A - move left
+
+S - move down
+
+D - move right
+
+Left click on Star - obser solar system
